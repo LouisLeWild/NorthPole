@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	p here we are
+	each val in entries
+		div
+			p 
+				each t in val.Tags
+					span [#{t}] 
+			p #{val.CreateDate}
+			p #{val.Text}
