@@ -3,9 +3,9 @@ extends layout
 block content
 	p here we are
 	each val in entries
-		div
-			p 
-				each t in val.Tags
-					span [#{t}] 
-			p #{val.CreateDate}
-			p #{val.Text}
+		div.entry
+			p.tags 
+				each t in val.Tags	
+					span.tag [#{t}] 
+			p.date #{val.CreateDate}
+			p.txt #{val.Text}
