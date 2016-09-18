@@ -1,11 +1,11 @@
 extends layout
 
 block content
-	p here we are
 	each val in entries
 		div.entry
 			p.tags 
 				each t in val.Tags	
 					span.tag [#{t}] 
+				span(class='tag control') add tag
 			p.date #{val.CreateDate}
 			p.txt #{val.Text}
