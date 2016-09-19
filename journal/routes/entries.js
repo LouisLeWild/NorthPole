@@ -9,19 +9,24 @@ router.get('/', function(req, res, next){
 });
 
 router.get(/\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}/, function(req, res, next){
-	var connection = entry.ConnectionTo('../SampleEntries.js');
-	var path = req.path;
-	var datesRegex = /(\d{4}-\d{2}-\d{2})\/(\d{4}-\d{2}-\d{2})/;
-	var dates = path.match(datesRegex);
-	var datePartRegex = /(\d{4})-(\d{2})-(\d{2})/;
-	var startMatch = dates[1].match(datePartRegex);
-	var endMatch = dates[2].match(datePartRegex);
-	var start = new Date(startMatch[1], startMatch[2], startMatch[3]);
-	var end = new Date(endMatch[1], endMatch[2], endMatch[3]);
+	var connection = entry.ConnectionTo('../SampleEntries.js'),
+	datesRegex = /(\d{4}-\d{2}-\d{2})\/(\d{4}-\d{2}-\d{2})/,
+	datePartRegex = /(\d{4})-(\d{2})-(\d{2})/,
+	path = req.path,
+	datesMatch = path.match(datesRegex),
+	startMatch = datesMatch[1].match(datePartRegex),
+	endMatch = datesMatch[2].match(datePartRegex),
+	start = new Date(startMatch[1], startMatch[2], startMatch[3]),
+	end = new Date(endMatch[1], endMatch[2], endMatch[3]),
 
+	entries = connection.EntriesByDateRange(start, end);
+	res.render('allentries', {"entries": entries});
+});
 
+router.get('/:tagname', function(req, res, next){ 
+	var connection = entry.ConnectionTo('../SampleEntries.js'),
 
-	var entries = connection.EntriesByDateRange(start, end);
+	entries = connection.EntriesByTag([req.params.tagname]);
 	res.render('allentries', {"entries": entries});
 });
 
