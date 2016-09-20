@@ -1,6 +1,10 @@
 extends layout
 
 block content
+	div(class='create entry')
+		p.tags
+			span(class='tag control') add tag
+		textarea(rows=5 cols=130)
 	each val in entries
 		div.entry
 			p.tags 

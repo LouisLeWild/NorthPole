@@ -19,6 +19,13 @@ me = {
 			EntriesByTagsAndDateRange: function(tags, start, end){
 				var byTags = my.filter(path, my.predicates.byTags(tags));
 				return my.filter(null, my.predicates.byDateRange(Date.parse(start), Date.parse(end)), byTags);
+			},
+
+			AddEntry: function(text, tags){
+				var newEntry = my.generateEntry(new Date(), text, tags);
+				var allEntries = my.readData(path);
+				allEntries.push(newEntry);
+				my.writeData(path, allEntries);
 			}
 		}
 	}
@@ -26,10 +33,22 @@ me = {
 
 my = {
 
-	readData: function readData(path){
+	readData: function(path){
 		var f = fs.readFileSync(path, 'utf8'),
 		entries = JSON.parse(f);
 		return entries;
+	},
+
+	writeData: function(path, allEntries){
+		fs.writeFileSync(path, allEntries, 'utf8');
+	},
+
+	generateEntry: function(createDate, text, tags){
+		return {
+			"CreateDate": createDate,
+			"Tags": tags,
+			"Text": text
+		};
 	},
 
 	filter: function(path, predicate, entries){
@@ -48,6 +67,6 @@ my = {
 
 		byDateRange: function(startDate, endDate){return function(entry){ return startDate <= Date.parse(entry.CreateDate) && Date.parse(entry.CreateDate) <= endDate; };}
 	}
-}
+};
 
 module.exports = me;

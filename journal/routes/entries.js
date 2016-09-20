@@ -3,12 +3,14 @@ var router = express.Router();
 var entry = require('../../EntryAPI');
 
 router.get('/', function(req, res, next){
+	console.log('entries root');
 	var connection = entry.ConnectionTo('../SampleEntries.js');
 	var allEntries = connection.AllEntries();
 	res.render('allentries', {"entries": allEntries});
 });
 
-router.get(/\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}/, function(req, res, next){
+router.get(/^\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/, function(req, res, next){
+	console.log('entries date range');
 	var connection = entry.ConnectionTo('../SampleEntries.js'),
 	datesRegex = /(\d{4}-\d{2}-\d{2})\/(\d{4}-\d{2}-\d{2})/,
 	datePartRegex = /(\d{4})-(\d{2})-(\d{2})/,
@@ -23,15 +25,33 @@ router.get(/\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}/, function(req, res, next){
 	res.render('allentries', {"entries": entries});
 });
 
-router.get('/:tagname', function(req, res, next){ 
+router.get(/^\/[A-Za-z][A-Za-z0-9_]*$/i, function(req, res, next){ 
+	console.log('entries tag', req.path);
 	var connection = entry.ConnectionTo('../SampleEntries.js'),
-
-	entries = connection.EntriesByTag([req.params.tagname]);
+	tagRegex = /^\/([A-Za-z][A-Za-z0-9_]*)$/i,
+	tagMatch = req.path.match(tagRegex),
+	tagname = tagMatch[1],
+	
+	entries = connection.EntriesByTag([tagname]);
 	res.render('allentries', {"entries": entries});
 });
 
-router.get('/jk', function(req, res, next){
-	res.send('i know you were just kidding that time!');
+router.get(/^\/[A-Za-z][A-Za-z0-9_]*\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/i, function(req, res, next){
+	console.log('entries tag and date');
+	var connection = entry.ConnectionTo('../SampleEntries.js');
+
+	paramsRegex = /^\/([A-Za-z][A-Za-z0-9_]*)\/(\d{4}-\d{2}-\d{2})\/(\d{4}-\d{2}-\d{2})$/i,
+	datePartRegex = /(\d{4})-(\d{2})-(\d{2})/,
+	path = req.path,
+	paramsMatch = path.match(paramsRegex),
+	tagname = paramsMatch[1],
+	startMatch = paramsMatch[2].match(datePartRegex),
+	endMatch = paramsMatch[3].match(datePartRegex),
+	start = new Date(startMatch[1], startMatch[2], startMatch[3]),
+	end = new Date(endMatch[1], endMatch[2], endMatch[3]),
+
+	entries = connection.EntriesByTagsAndDateRange([tagname], start, end);
+	res.render('allentries', {"entries": entries});
 });
 
 module.exports = router;
