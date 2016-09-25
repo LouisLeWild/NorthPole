@@ -5,11 +5,17 @@ block content
 		p.tags
 			span(class='tag control') add tag
 		textarea(rows=5 cols=130)
+		input(type='button' class='save' value='save')
+	- var entryId = 0;
 	each val in entries
-		div.entry
+		div(class='entry' id='entry' + entryId++)
 			p.tags 
 				each t in val.Tags	
 					span.tag [#{t}] 
 				span(class='tag control') add tag
 			p.date #{val.CreateDate}
 			p.txt #{val.Text}
+
+block scripts
+	script(src='https://code.jquery.com/jquery-3.1.0.min.js') 	
+	script(src='/javascripts/site.js')

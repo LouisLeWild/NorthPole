@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var entry = require('../../EntryAPI');
 
+//root route ... test for now, not sure how i want to use it yet
 router.get('/', function(req, res, next){
 	console.log('entries root');
 	var connection = entry.ConnectionTo('../SampleEntries.js');
@@ -9,6 +10,7 @@ router.get('/', function(req, res, next){
 	res.render('allentries', {"entries": allEntries});
 });
 
+//get by date
 router.get(/^\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/, function(req, res, next){
 	console.log('entries date range');
 	var connection = entry.ConnectionTo('../SampleEntries.js'),
@@ -25,6 +27,7 @@ router.get(/^\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/, function(req, res, next){
 	res.render('allentries', {"entries": entries});
 });
 
+//get by date
 router.get(/^\/[A-Za-z][A-Za-z0-9_]*$/i, function(req, res, next){ 
 	console.log('entries tag', req.path);
 	var connection = entry.ConnectionTo('../SampleEntries.js'),
@@ -36,6 +39,7 @@ router.get(/^\/[A-Za-z][A-Za-z0-9_]*$/i, function(req, res, next){
 	res.render('allentries', {"entries": entries});
 });
 
+//get by tag and date
 router.get(/^\/[A-Za-z][A-Za-z0-9_]*\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/i, function(req, res, next){
 	console.log('entries tag and date');
 	var connection = entry.ConnectionTo('../SampleEntries.js');
@@ -52,6 +56,12 @@ router.get(/^\/[A-Za-z][A-Za-z0-9_]*\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/i, f
 
 	entries = connection.EntriesByTagsAndDateRange([tagname], start, end);
 	res.render('allentries', {"entries": entries});
+});
+
+router.post('/Entry', function(req, res, next){
+console.log('hi from the /Entry route(post)');
+console.log(req.body);
+	res.send("back at ya");
 });
 
 module.exports = router;
