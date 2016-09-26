@@ -5,7 +5,7 @@ me = {
 		var myPath = path;
 		return {
 			AllEntries: function(){
-				return my.readData(path);
+				return my.readEntries(path);
 			},
 
 			EntriesByTag: function(tags){
@@ -23,7 +23,7 @@ me = {
 
 			AddEntry: function(text, tags){
 				var newEntry = my.generateEntry(new Date(), text, tags);
-				var allEntries = my.readData(path);
+				var allEntries = my.readEntries(path);
 				allEntries.push(newEntry);
 				my.writeData(path, allEntries);
 			}
@@ -33,10 +33,10 @@ me = {
 
 my = {
 
-	readData: function(path){
+	readEntries: function(path){
 		var f = fs.readFileSync(path, 'utf8'),
-		entries = JSON.parse(f);
-		return entries;
+		data = JSON.parse(f);
+		return data.entries;
 	},
 
 	writeData: function(path, allEntries){
@@ -52,7 +52,7 @@ my = {
 	},
 
 	filter: function(path, predicate, entries){
-		var myEntries = entries || my.readData(path),
+		var myEntries = entries || my.readEntries(path),
 		filteredEntries = [];
 		for(var e in myEntries){
 			if(predicate(myEntries[e])){
