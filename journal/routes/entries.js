@@ -60,7 +60,10 @@ router.get(/^\/[A-Za-z][A-Za-z0-9_]*\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/i, f
 
 router.post('/Entry', function(req, res, next){
 console.log('hi from the /Entry route(post)');
-console.log(req.body);
+console.log(req.body.entry);
+console.log('entries date range');
+	var connection = entry.ConnectionTo('../SampleEntries.js');
+	connection.AddEntry(JSON.stringify(req.body.entry), ['first']);
 	res.send("back at ya");
 });
 

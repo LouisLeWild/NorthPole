@@ -40,7 +40,7 @@ my = {
 	},
 
 	writeData: function(path, allEntries){
-		fs.writeFileSync(path, allEntries, 'utf8');
+		fs.writeFileSync(path, JSON.stringify(allEntries), 'utf8');
 	},
 
 	generateEntry: function(createDate, text, tags){
