@@ -23,9 +23,7 @@ me = {
 
 			AddEntry: function(text, tags){
 				var newEntry = my.generateEntry(new Date(), text, tags);
-				var allEntries = my.readEntries(path);
-				allEntries.push(newEntry);
-				my.writeData(path, allEntries);
+				my.appendEntry(path, newEntry);
 			}
 		}
 	}
@@ -33,14 +31,56 @@ me = {
 
 my = {
 
+	readData: function(path){
+		var f,
+			data
+		try{
+			f = fs.readFileSync(path, 'utf8');
+			data = JSON.parse(f);
+
+		}
+		catch(e){		
+			if(e.code == 'ENOENT' ){			
+				my.initPath(path);
+				f = fs.readFileSync(path, 'utf8');
+				data = JSON.parse(f)
+			}
+			else{
+				console.log("error:", e);
+				throw(e);
+			}
+		}
+		return data;
+	},
+
 	readEntries: function(path){
-		var f = fs.readFileSync(path, 'utf8'),
-		data = JSON.parse(f);
-		return data.entries;
+		var data = my.readData(path);
+		return data.Entries;
+	},
+
+	readTags: function (path){
+		var data = my.readData(path);
+		return data.Tags;
+	},
+
+	appendEntry: function(path, entry){
+		var knownTags = my.readTags(path),
+		entries = my.readEntries(path),
+		enteredTags = entry.Tags,
+		newTags = []
+		allTags = [];
+		for(var t in enteredTags){
+			if(knownTags.indexOf(enteredTags[t]) === -1){
+				newTags.push(enteredTags[t]);
+			}
+		}
+		allTags = knownTags.concat(newTags);
+		entries.push(entry);
+		my.writeData(path, { "Entries": entries, "Tags": allTags });
 	},
 
 	writeData: function(path, allEntries){
-		fs.writeFileSync(path, JSON.stringify(allEntries), 'utf8');
+		fs.writeFileSync(path, JSON.stringify(allEntries, null, 2), 'utf8');
 	},
 
 	generateEntry: function(createDate, text, tags){
@@ -66,6 +106,10 @@ my = {
 		byTags: function(tags){ return function(entry){ for(var t in tags){ if(entry.Tags.indexOf(tags[t]) != -1){ return true;}  } }; },
 
 		byDateRange: function(startDate, endDate){return function(entry){ return startDate <= Date.parse(entry.CreateDate) && Date.parse(entry.CreateDate) <= endDate; };}
+	},
+
+	initPath: function(path){
+		fs.writeFileSync(path, JSON.stringify({"Entries": [], "Tags": []}), 'utf8');
 	}
 };
 
