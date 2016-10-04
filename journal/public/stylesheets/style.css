@@ -16,14 +16,6 @@ div.entry {
 	border-radius: 5px;
 }
 
-p.tags {
-	text-align: right;
-}
-
-p.tags:hover{
-	cursor: default;
-}
-
 p.date {
 	text-align: left;
 }
@@ -38,7 +30,68 @@ span.control:hover {
 	cursor: default;
 }
 
-span.tag.control {
-	padding: 0 0 1px 0;
-	border-radius: 2px;
-}
+
+
+
+
+		span.closex {
+			margin: 0 0 0 3px;
+			color: red;
+			font-size: .7em;
+
+			position: relative;
+			bottom: 6px;
+		}
+
+		span.closex:hover {
+			color: white;
+		}
+
+		span.tagwrap {
+			background-color: blue;
+			color: yellow;
+			padding: 2px;
+			margin: 1px;
+			border: dotted;
+			border-color: red;
+			border-width: 1px;
+
+		}
+		
+		ul.taglist {
+			float: right;
+			margin: 4px 2px;
+		}
+
+		ul.taglist li{
+			display: inline;
+			list-style-type: none;
+			padding-left: 2px;
+			cursor: default;
+		}
+
+		div.newentry{
+			
+			border: solid;
+			border-color: green;
+			border-style: dashed;
+			border-width: 1px;
+			padding: 3px;
+		}
+
+		.entrytext {
+			clear: both;
+			padding: 1px 10px;
+		}
+
+		.entrytext input {
+			display: block;
+			width: 300px;
+			height: 40px;
+			font-size: 2em;
+			border-radius: 12px;
+			position: relative;
+			left: 30%;
+
+
+		}

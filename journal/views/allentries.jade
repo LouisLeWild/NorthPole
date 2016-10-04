@@ -1,11 +1,15 @@
 extends layout
 
 block content
-	div(class='create entry')
-		p.tags
-			span(class='tag control') add tag
-		textarea(rows=5 cols=130)
-		input(type='button' class='save' value='save')
+	div(class='create entry newentry')
+		ul(class="taglist" data-bind="foreach: Tags")
+			li
+				span.tagwrap
+					span(class="tagtext" data-bind="text: $data")
+					span.closex x
+		div.entrytext
+			textarea(rows=5 cols=130 data-bind="value: Text")
+			input(type='button' class='save' value='save')
 	- var entryId = 0;
 	each val in entries
 		div(class='entry' id='entry' + entryId++)
@@ -17,4 +21,4 @@ block content
 			p.txt #{val.Text}
 
 block scripts
-	script(src='/javascripts/site.js')
+	
