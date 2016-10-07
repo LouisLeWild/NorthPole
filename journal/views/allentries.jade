@@ -10,13 +10,14 @@ block content
 		div.entrytext
 			textarea(rows=5 cols=130 data-bind="value: Text")
 			input(type='button' class='save' value='save')
+		select(class="selecttags" data-bind="options: TagOptions, optionsCaption: '..Available Tags..'")
 	- var entryId = 0;
 	each val in entries
 		div(class='entry' id='entry' + entryId++)
 			p.tags 
 				each t in val.Tags	
 					span.tag [#{t}] 
-				span(class='tag control') add tag
+				//- span(class='tag control') add tag
 			p.date #{val.CreateDate}
 			p.txt #{val.Text}
 

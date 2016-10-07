@@ -27,7 +27,7 @@ router.get(/^\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/, function(req, res, next){
 	res.render('allentries', {"entries": entries});
 });
 
-//get by date
+//get by tag
 router.get(/^\/[A-Za-z][A-Za-z0-9_]*$/i, function(req, res, next){ 
 	console.log('entries tag', req.path);
 	var connection = entry.ConnectionTo('../SampleEntries.js'),
@@ -58,10 +58,14 @@ router.get(/^\/[A-Za-z][A-Za-z0-9_]*\/\d{4}-\d{2}-\d{2}\/\d{4}-\d{2}-\d{2}$/i, f
 	res.render('allentries', {"entries": entries});
 });
 
+router.get('/data/tags/', function(req, res, next){
+	console.log('get all tags');
+	var connection = entry.ConnectionTo('../SampleEntries.js');
+	res.send(connection.AllTags());
+});
+
 router.post('/Entry', function(req, res, next){
 console.log('/Entry (post)');
-console.log(req.body);
-
 
 	var connection = entry.ConnectionTo('../SampleEntries.js');
 	connection.AddEntry(JSON.stringify(req.body["Text"]), req.body["Tags[]"]);

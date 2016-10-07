@@ -8,6 +8,10 @@ me = {
 				return my.readEntries(path);
 			},
 
+			AllTags: function(){
+				return my.readTags(path);
+			},
+
 			EntriesByTag: function(tags){
 				return my.filter(path, my.predicates.byTags(tags) );
 			},
@@ -60,6 +64,7 @@ my = {
 
 	readTags: function (path){
 		var data = my.readData(path);
+		console.log('readTags about to return:', data.Tags);
 		return data.Tags;
 	},
 
@@ -69,12 +74,25 @@ my = {
 		enteredTags = entry.Tags,
 		newTags = []
 		allTags = [];
-		for(var t in enteredTags){
-			if(knownTags.indexOf(enteredTags[t]) === -1){
-				newTags.push(enteredTags[t]);
+
+		if(Object.prototype.toString.call(enteredTags) === '[object String]') {
+			if(knownTags.indexOf(enteredTags) === -1)
+				newTags.push(enteredTags);
+				var a = [];
+				a.push(enteredTags);
+				entry.Tags = a;
+		}
+		else{
+			for(var t in enteredTags){
+				if(knownTags.indexOf(enteredTags[t]) === -1){
+					newTags.push(enteredTags[t]);
+				}
 			}
 		}
+console.log("New tags:", newTags);
+console.log("All tags:", allTags);
 		allTags = knownTags.concat(newTags);
+console.log("All tags:", allTags);
 		entries.push(entry);
 		my.writeData(path, { "Entries": entries, "Tags": allTags });
 	},
