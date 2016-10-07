@@ -92,6 +92,8 @@ span.control:hover {
 			border-radius: 12px;
 			position: relative;
 			left: 30%;
+		}
 
-
+		.hidden{
+			display:none;
 		}

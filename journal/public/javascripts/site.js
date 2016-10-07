@@ -19,11 +19,6 @@ $('input.save').on('click',
 			.always(function(){ console.log('attempt to post on /Entry'); });
 		});
 
-$('select.selecttags').on('change', function(e){
-	pushTag($(this).val());
-	this.selectedIndex = 0;
-});
-
 function logEntireEventObject(e){
 	for(p in e){
 		console.log(p,":",e[p]);
@@ -39,15 +34,7 @@ var pushTag = function(tag){
 	var viewModel = {};
 	viewModel.Text = ko.observable("");
 	viewModel.Tags = ko.observableArray();
-	viewModel.TagOptions = ko.observableArray(['Animal','Mineral','Vegetable']);
-
-	// viewModel.Tags.push("hello");
-	// viewModel.Tags.push("world");
-	// viewModel.Tags.push("how");
-	// viewModel.Tags.push("are");
-	// viewModel.Tags.push("you");
-
-	
+	viewModel.TagOptions = ko.observableArray();
 
 	ko.applyBindings(viewModel);
 	var i;
@@ -59,8 +46,21 @@ var pushTag = function(tag){
 
 	$.ajax({
 		type: "GET",
-		url: "/entries/data/tags",
+		url: "/entries/data/tags/"
 	})
-	.done(function(res){ console.log("here is the response:", JSON.parse(res)); })
-	.fail(function(){ console.log('falure getting on /tags')})
-	.always(function(){ console.log('attempt to get on /tags');});
+	.done(function(res){ for(var i =0; i<res.length;i++){viewModel.TagOptions.push(res[i]);} })
+	.fail(function(){ console.log('falure getting on /tags'); })
+	.always(function(){ console.log('attempt to get on /tags'); });
+
+$('select.selecttags').on('change', function(e){
+	pushTag($(this).val());
+	this.selectedIndex = 0;
+});	
+
+$('li.add > span').on('click', function(e){ $('#newtag').toggleClass('hidden'); $('#newtagtext').focus(); });
+
+$('input.done').on('click', function(e){ 
+	viewModel.Tags.push( $('#newtagtext').val() ); 
+	$('#newtagtext').val(""); 
+	$('#newtag').toggleClass('hidden'); 
+});

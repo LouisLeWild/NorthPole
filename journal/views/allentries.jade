@@ -11,6 +11,10 @@ block content
 			textarea(rows=5 cols=130 data-bind="value: Text")
 			input(type='button' class='save' value='save')
 		select(class="selecttags" data-bind="options: TagOptions, optionsCaption: '..Available Tags..'")
+	div(class='entry newtag hidden' id='newtag')
+		label(for="newtagtext") New Tag:
+		input(type='text' id='newtagtext')
+		input(type='button' class='done' value='done')
 	- var entryId = 0;
 	each val in entries
 		div(class='entry' id='entry' + entryId++)
