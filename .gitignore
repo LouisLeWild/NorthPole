@@ -1,1 +1,4 @@
 node_modules/
+SampleEntries_*
+journal/public/javascripts/Backbone1.3.3.js
+knockoutex.html
